@@ -40,7 +40,10 @@ class MainActivity : FlutterActivity() {
                             hashMapOf<String, Any?>(
                                     "enabled" to wifiManager.isWifiEnabled,
                                     "ssid" to info.ssid,
-                                    "ipAddress" to intToIp(info.ipAddress)
+                                    "ipAddress" to intToIp(info.ipAddress),
+                                    "rssi" to info.rssi,
+                                    "linkSpeed" to info.linkSpeed,
+                                    "frequency" to info.frequency
                             )
 
                     result.success(map)

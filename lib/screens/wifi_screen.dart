@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wifi_reader/models/wifi_info.dart';
 import 'package:wifi_reader/services/wifi_services.dart';
 
 class WifiScreen extends StatefulWidget {
@@ -10,18 +11,7 @@ class WifiScreen extends StatefulWidget {
 
 class _WifiScreenState extends State<WifiScreen> {
   final WifiService _wifiService = WifiService();
-  bool? wifiEnabled;
-
-  String message = "Press the button";
-  Map<dynamic, dynamic>? wifiInfo;
-  // Future<void> _getWifiState() async {
-  //   final result = await _wifiService.getWifiState();
-
-  //   setState(() {
-  //     wifiEnabled = result;
-  //   });
-  // }
-
+  WifiInfo? wifiInfo;
   Future<void> _getWifiInfo() async {
     final result = await _wifiService.getWifiInfo();
 
@@ -30,18 +20,11 @@ class _WifiScreenState extends State<WifiScreen> {
     });
   }
 
-  Future<void> _callAndroid() async {
-    try {
-      final result = await _wifiService.sayHello();
-
-      setState(() {
-        message = result;
-      });
-    } catch (e) {
-      setState(() {
-        message = e.toString();
-      });
-    }
+  String signalQuality(int rssi) {
+    if (rssi >= -50) return "Excellent";
+    if (rssi >= -60) return "Good";
+    if (rssi >= -70) return "Fair";
+    return "Poor";
   }
 
   @override
@@ -56,10 +39,17 @@ class _WifiScreenState extends State<WifiScreen> {
               const Text("Press button")
             else
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Enabled : ${wifiInfo!['enabled']}"),
-                  Text("SSID : ${wifiInfo!['ssid']}"),
-                  Text("IP : ${wifiInfo!['ipAddress']}"),
+                  Text("Enabled : ${wifiInfo?.enabled}"),
+                  Text("SSID : ${wifiInfo?.ssid}"),
+                  Text("IP Address : ${wifiInfo?.ipAddress}"),
+                  // Text("RSSI : ${wifiInfo?.rssi} dBm"),
+                  Text(
+                    "Signal : ${signalQuality(wifiInfo!.rssi)} (${wifiInfo?.rssi} dBm)",
+                  ),
+                  Text("Link Speed : ${wifiInfo?.linkSpeed} Mbps"),
+                  Text("Frequency : ${wifiInfo?.frequency} MHz"),
                 ],
               ),
             const SizedBox(height: 20),
