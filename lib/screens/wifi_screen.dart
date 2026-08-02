@@ -13,11 +13,20 @@ class _WifiScreenState extends State<WifiScreen> {
   bool? wifiEnabled;
 
   String message = "Press the button";
-  Future<void> _getWifiState() async {
-    final result = await _wifiService.getWifiState();
+  Map<dynamic, dynamic>? wifiInfo;
+  // Future<void> _getWifiState() async {
+  //   final result = await _wifiService.getWifiState();
+
+  //   setState(() {
+  //     wifiEnabled = result;
+  //   });
+  // }
+
+  Future<void> _getWifiInfo() async {
+    final result = await _wifiService.getWifiInfo();
 
     setState(() {
-      wifiEnabled = result;
+      wifiInfo = result;
     });
   }
 
@@ -43,18 +52,20 @@ class _WifiScreenState extends State<WifiScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              wifiEnabled == null
-                  ? "Press the button"
-                  : wifiEnabled!
-                  ? "WiFi is ON"
-                  : "WiFi is OFF",
-              style: const TextStyle(fontSize: 22),
-            ),
+            if (wifiInfo == null)
+              const Text("Press button")
+            else
+              Column(
+                children: [
+                  Text("Enabled : ${wifiInfo!['enabled']}"),
+                  Text("SSID : ${wifiInfo!['ssid']}"),
+                  Text("IP : ${wifiInfo!['ipAddress']}"),
+                ],
+              ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _getWifiState,
-              child: const Text("Check WiFi"),
+              onPressed: _getWifiInfo,
+              child: const Text("Load WiFi Info"),
             ),
           ],
         ),

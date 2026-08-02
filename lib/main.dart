@@ -12,7 +12,7 @@ class WifiApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'WiFi Method Channel',
+      title: 'WiFiReader',
       theme: ThemeData(colorSchemeSeed: Colors.blue, useMaterial3: true),
       home: const WifiScreen(),
     );

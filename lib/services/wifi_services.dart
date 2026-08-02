@@ -7,8 +7,8 @@ class WifiService {
     return await _channel.invokeMethod('hello');
   }
 
-  Future<bool> getWifiState() async {
-    final bool enabled = await _channel.invokeMethod('getWifiState');
-    return enabled;
+  Future<Map<dynamic, dynamic>> getWifiInfo() async {
+    final result = await _channel.invokeMethod('getWifiInfo');
+    return Map<dynamic, dynamic>.from(result);
   }
 }
